@@ -1,5 +1,6 @@
 // src/App.jsx
 import { Routes, Route, Navigate } from 'react-router-dom'
+
 import Login from './auth/pages/Login'
 import Register from './auth/pages/Register'
 import ForgotPassword from './auth/pages/ForgotPassword'
@@ -7,8 +8,9 @@ import ResetPassword from './auth/pages/ResetPassword'
 import Profile from './auth/pages/Profile'
 import Logout from './auth/pages/Logout'
 import RefreshToken from './auth/pages/RefreshToken'
-import Layout from './layout/Layout'
 import Dashboard from './auth/pages/Dashboard'
+
+import Layout from './layout/Layout'
 
 import UsuarioList from './modules/usuarios/UsuarioList'
 import UsuarioForm from './modules/usuarios/UsuarioForm'
@@ -37,7 +39,10 @@ import PagoDetalle from './modules/pagos/PagoDetalle'
 import FacturaList from './modules/facturas/FacturaList'
 import FacturaDetalle from './modules/facturas/FacturaDetalle'
 
-// Ruta protegida
+import AlquilerInicio from './modules/alquileres/AlquilerInicio'
+import AlquilerFinalizar from './modules/alquileres/AlquilerFinalizar'
+import AlquilerDetalle from './modules/alquileres/AlquilerDetalle'
+
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token')
   return token ? children : <Navigate to="/login" />
@@ -46,7 +51,7 @@ function PrivateRoute({ children }) {
 function App() {
   return (
     <Routes>
-      {/* Ruta raíz decide si redirige a dashboard o login */}
+      {/* Ruta raíz */}
       <Route
         path="/"
         element={
@@ -118,10 +123,14 @@ function App() {
         {/* Facturas */}
         <Route path="facturas" element={<FacturaList />} />
         <Route path="facturas/:id" element={<FacturaDetalle />} />
+
+        {/* Alquileres */}
+        <Route path="alquileres/iniciar" element={<AlquilerInicio />} />
+        <Route path="alquileres/finalizar/:id" element={<AlquilerFinalizar />} />
+        <Route path="alquileres/:id" element={<AlquilerDetalle />} />
       </Route>
     </Routes>
   )
 }
 
 export default App
-
