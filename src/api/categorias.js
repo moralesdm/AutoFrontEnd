@@ -1,30 +1,41 @@
-// src/api/categorias.js
-const API_URL = 'http://localhost:3001/api/categorias'; // ajusta la URL si es necesario
+const API_BASE = 'http://localhost:3002/api/vehiculos/categorias';
 
 export const getCategorias = async () => {
-  const res = await fetch(API_URL);
-  return await res.json();
+  const res = await fetch(`${API_BASE}`);
+  if (!res.ok) throw new Error('Error al obtener categorías');
+  return res.json();
 };
 
 export const getCategoriaById = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`);
-  return await res.json();
+  const res = await fetch(`${API_BASE}/${id}`);
+  if (!res.ok) throw new Error('Error al obtener categoría');
+  return res.json();
 };
 
-export const createCategoria = async (data) => {
-  const res = await fetch(API_URL, {
+export const createCategoria = async (categoriaData) => {
+  const res = await fetch(`${API_BASE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(categoriaData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al crear categoría');
+  return res.json();
 };
 
-export const updateCategoria = async (data, id) => {
-  const res = await fetch(`${API_URL}/${id}`, {
+export const updateCategoria = async (id, categoriaData) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(categoriaData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al actualizar categoría');
+  return res.json();
+};
+
+export const deleteCategoria = async (id) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Error al eliminar categoría');
+  return res.json();
 };

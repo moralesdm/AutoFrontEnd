@@ -1,57 +1,66 @@
-// src/modules/usuarios/UsuarioForm.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUsuarioById, createUsuario, updateUsuario } from '../../api/usuarios';
+import { getUsuarioById, updateUsuario } from '../../api/auth';
 
 export default function UsuarioForm() {
-  const [form, setForm] = useState({
-    nombre: '',
-    apellido: '',
-    email: '',
-    password: '',
-    telefono: '',
-    direccion: '',
-    ciudad: '',
-    pais: '',
-    rol: ''
-  });
-
-  const navigate = useNavigate();
+  const [form, setForm] = useState({ nombre: '', email: '', rol: 'CLIENTE' });
   const { id } = useParams();
-  const isEdit = !!id;
+  const navigate = useNavigate();
+  const isEdit = Boolean(id);
 
   useEffect(() => {
     if (isEdit) {
-      getUsuarioById(id).then(setForm);
+      getUsuarioById(id)
+        .then(data => {
+          if (data) setForm({ nombre: data.nombre, email: data.email, rol: data.rol });
+          else alert('Usuario no encontrado');
+        })
+        .catch(() => alert('Error cargando usuario'));
+    } else {
+      alert('No se puede crear usuario desde aquí. Use el registro público.');
+      navigate('/register');
     }
-  }, [id]);
+  }, [id, isEdit, navigate]);
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const action = isEdit ? updateUsuario : createUsuario;
-    action(form, id).then(() => navigate('/usuarios'));
+    if (!isEdit) return; // protección extra
+
+    try {
+      await updateUsuario(id, form);
+      navigate('/usuarios');
+    } catch (error) {
+      alert(error.message || 'Error al actualizar usuario');
+    }
   };
+
+  if (!isEdit) return null; // o un mensaje o redirección ya hecha arriba
 
   return (
     <div>
-      <h2>{isEdit ? 'Editar Usuario' : 'Crear Usuario'}</h2>
+      <h2>Editar Usuario</h2>
       <form onSubmit={handleSubmit}>
-        <input name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} required />
-        <input name="apellido" placeholder="Apellido" value={form.apellido} onChange={handleChange} required />
-        <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input name="password" placeholder="Password" type="password" value={form.password} onChange={handleChange} required={!isEdit} />
-        <input name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
-        <input name="direccion" placeholder="Dirección" value={form.direccion} onChange={handleChange} />
-        <input name="ciudad" placeholder="Ciudad" value={form.ciudad} onChange={handleChange} />
-        <input name="pais" placeholder="País" value={form.pais} onChange={handleChange} />
-        <select name="rol" value={form.rol} onChange={handleChange}>
-          <option value="">-- Selecciona Rol --</option>
-          <option value="CLIENTE">Cliente</option>
-          <option value="ADMIN">Admin</option>
+        <input
+          name="nombre"
+          placeholder="Nombre"
+          value={form.nombre}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
+        <select name="rol" value={form.rol} onChange={handleChange} required>
+          <option value="ADMIN">ADMIN</option>
+          <option value="CLIENTE">CLIENTE</option>
+          <option value="EMPLEADO">EMPLEADO</option>
         </select>
         <button type="submit">Guardar</button>
       </form>

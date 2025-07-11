@@ -1,79 +1,53 @@
-// src/modules/reservas/ReservaForm.jsx
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getReservaById, createReserva, updateReserva } from '../../api/reservas';
-import { getUsuarios } from '../../api/usuarios';
-import { getVehiculos } from '../../api/vehiculos';
 
 export default function ReservaForm() {
-  const { id } = useParams();
-  const isEdit = !!id;
-  const navigate = useNavigate();
-
   const [form, setForm] = useState({
     usuarioId: '',
     vehiculoId: '',
     fechaInicio: '',
-    fechaFin: '',
-    estado: 'PENDIENTE'
+    fechaFin: ''
   });
 
-  const [usuarios, setUsuarios] = useState([]);
-  const [vehiculos, setVehiculos] = useState([]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEdit = !!id;
 
   useEffect(() => {
-    getUsuarios().then(setUsuarios);
-    getVehiculos().then(setVehiculos);
     if (isEdit) {
-      getReservaById(id).then(data => {
-        setForm({
-          usuarioId: data.usuario.id,
-          vehiculoId: data.vehiculo.id,
-          fechaInicio: data.fechaInicio,
-          fechaFin: data.fechaFin,
-          estado: data.estado
-        });
-      });
+      getReservaById(id).then(data => setForm({
+        usuarioId: data.usuarioId,
+        vehiculoId: data.vehiculoId,
+        fechaInicio: data.fechaInicio.slice(0,16), // for datetime-local input
+        fechaFin: data.fechaFin.slice(0,16)
+      }));
     }
   }, [id]);
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = e => setForm({...form, [e.target.name]: e.target.value});
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    const action = isEdit ? updateReserva : createReserva;
-    action(form, id).then(() => navigate('/reservas'));
+    try {
+      if (isEdit) await updateReserva(id, form);
+      else await createReserva(form);
+      navigate('/reservas');
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
     <div>
       <h2>{isEdit ? 'Editar Reserva' : 'Nueva Reserva'}</h2>
       <form onSubmit={handleSubmit}>
-        <select name="usuarioId" value={form.usuarioId} onChange={handleChange} required>
-          <option value="">-- Usuario --</option>
-          {usuarios.map(u => (
-            <option key={u.id} value={u.id}>{u.nombre} {u.apellido}</option>
-          ))}
-        </select>
-
-        <select name="vehiculoId" value={form.vehiculoId} onChange={handleChange} required>
-          <option value="">-- Vehículo --</option>
-          {vehiculos.map(v => (
-            <option key={v.id} value={v.id}>{v.marca} {v.modelo}</option>
-          ))}
-        </select>
-
-        <input type="datetime-local" name="fechaInicio" value={form.fechaInicio} onChange={handleChange} required />
-        <input type="datetime-local" name="fechaFin" value={form.fechaFin} onChange={handleChange} required />
-
-        <select name="estado" value={form.estado} onChange={handleChange}>
-          <option value="PENDIENTE">Pendiente</option>
-          <option value="CONFIRMADA">Confirmada</option>
-          <option value="CANCELADA">Cancelada</option>
-        </select>
-
+        <input name="usuarioId" type="number" placeholder="ID Usuario" value={form.usuarioId} onChange={handleChange} required />
+        <input name="vehiculoId" type="number" placeholder="ID Vehículo" value={form.vehiculoId} onChange={handleChange} required />
+        <label>Fecha Inicio:</label>
+        <input name="fechaInicio" type="datetime-local" value={form.fechaInicio} onChange={handleChange} required />
+        <label>Fecha Fin:</label>
+        <input name="fechaFin" type="datetime-local" value={form.fechaFin} onChange={handleChange} required />
         <button type="submit">Guardar</button>
       </form>
     </div>

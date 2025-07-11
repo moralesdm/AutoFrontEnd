@@ -1,27 +1,28 @@
-// src/modules/facturas/FacturaDetalle.jsx
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getFacturaById } from '../../api/facturas';
 
 export default function FacturaDetalle() {
   const { id } = useParams();
   const [factura, setFactura] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getFacturaById(id).then(setFactura);
+    getFacturaById(id)
+      .then(setFactura)
+      .finally(() => setLoading(false));
   }, [id]);
 
-  if (!factura) return <p>Cargando...</p>;
+  if (loading) return <div>Cargando factura...</div>;
+  if (!factura) return <div>Factura no encontrada</div>;
 
   return (
     <div>
-      <h2>Detalle de Factura #{factura.id}</h2>
-      <p><strong>Número:</strong> {factura.numero}</p>
-      <p><strong>Fecha de Emisión:</strong> {new Date(factura.fechaEmision).toLocaleString()}</p>
-      <p><strong>Monto Total:</strong> ${factura.montoTotal.toFixed(2)}</p>
-      <p><strong>Usuario:</strong> {factura.usuario?.nombre} {factura.usuario?.apellido}</p>
-      <p><strong>Reserva:</strong> #{factura.reserva?.id}</p>
-      <Link to="/facturas">Volver</Link>
+      <h2>Factura #{factura.numero}</h2>
+      <p>Fecha de emisión: {new Date(factura.fechaEmision).toLocaleString()}</p>
+      <p>Monto total: ${factura.montoTotal.toFixed(2)}</p>
+      <p>Usuario ID: {factura.usuarioId}</p>
+      <p>Reserva ID: {factura.reservaId}</p>
     </div>
   );
 }

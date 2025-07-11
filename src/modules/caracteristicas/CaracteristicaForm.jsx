@@ -1,29 +1,28 @@
-// src/modules/caracteristicas/CaracteristicaForm.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getCaracteristicaById, createCaracteristica, updateCaracteristica } from '../../api/caracteristicas';
 
 export default function CaracteristicaForm() {
-  const [form, setForm] = useState({ nombre: '' });
-
-  const navigate = useNavigate();
+  const [nombre, setNombre] = useState('');
   const { id } = useParams();
+  const navigate = useNavigate();
   const isEdit = !!id;
 
   useEffect(() => {
     if (isEdit) {
-      getCaracteristicaById(id).then(setForm);
+      getCaracteristicaById(id).then(data => setNombre(data.nombre));
     }
   }, [id]);
 
-  const handleChange = e => {
-    setForm({ nombre: e.target.value });
-  };
-
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const action = isEdit ? updateCaracteristica : createCaracteristica;
-    action(form, id).then(() => navigate('/caracteristicas'));
+    try {
+      if (isEdit) await updateCaracteristica(id, { nombre });
+      else await createCaracteristica({ nombre });
+      navigate('/caracteristicas');
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -31,10 +30,10 @@ export default function CaracteristicaForm() {
       <h2>{isEdit ? 'Editar Característica' : 'Nueva Característica'}</h2>
       <form onSubmit={handleSubmit}>
         <input
-          name="nombre"
+          type="text"
           placeholder="Nombre"
-          value={form.nombre}
-          onChange={handleChange}
+          value={nombre}
+          onChange={e => setNombre(e.target.value)}
           required
         />
         <button type="submit">Guardar</button>

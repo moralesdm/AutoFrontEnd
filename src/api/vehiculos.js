@@ -1,30 +1,47 @@
-// src/api/vehiculos.js
-const API_URL = 'http://localhost:3001/api/vehiculos'; // cambia la URL si es diferente
+const API_BASE = 'http://localhost:3002/api/vehiculos';
 
 export const getVehiculos = async () => {
-  const res = await fetch(API_URL);
-  return await res.json();
+  const res = await fetch(`${API_BASE}`);
+  if (!res.ok) throw new Error('Error al obtener vehículos');
+  return res.json();
 };
 
 export const getVehiculoById = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`);
-  return await res.json();
+  const res = await fetch(`${API_BASE}/${id}`);
+  if (!res.ok) throw new Error('Error al obtener vehículo');
+  return res.json();
 };
 
-export const createVehiculo = async (data) => {
-  const res = await fetch(API_URL, {
+export const createVehiculo = async (vehiculoData) => {
+  const res = await fetch(`${API_BASE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(vehiculoData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al crear vehículo');
+  return res.json();
 };
 
-export const updateVehiculo = async (data, id) => {
-  const res = await fetch(`${API_URL}/${id}`, {
+export const updateVehiculo = async (id, vehiculoData) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(vehiculoData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al actualizar vehículo');
+  return res.json();
+};
+
+export const deleteVehiculo = async (id) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Error al eliminar vehículo');
+  return res.json();
+};
+
+export const getCategoriasVehiculos = async () => {
+  const res = await fetch('http://13.223.20.3/api/vehiculos/categorias');
+  if (!res.ok) throw new Error('Error al obtener categorías');
+  return res.json();
 };

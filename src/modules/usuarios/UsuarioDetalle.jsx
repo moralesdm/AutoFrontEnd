@@ -1,31 +1,26 @@
-// src/modules/usuarios/UsuarioDetalle.jsx
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUsuarioById } from '../../api/usuarios';
-
+import { getUsuarioById } from '../../api/auth';
 export default function UsuarioDetalle() {
   const { id } = useParams();
   const [usuario, setUsuario] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUsuarioById(id).then(setUsuario);
+    getUsuarioById(id)
+      .then(setUsuario)
+      .finally(() => setLoading(false));
   }, [id]);
 
-  if (!usuario) return <p>Cargando...</p>;
+  if (loading) return <div>Cargando usuario...</div>;
+  if (!usuario) return <div>Usuario no encontrado</div>;
 
   return (
     <div>
-      <h2>Detalle de Usuario</h2>
-      <p><strong>ID:</strong> {usuario.id}</p>
-      <p><strong>Nombre:</strong> {usuario.nombre} {usuario.apellido}</p>
-      <p><strong>Email:</strong> {usuario.email}</p>
-      <p><strong>Teléfono:</strong> {usuario.telefono}</p>
-      <p><strong>Dirección:</strong> {usuario.direccion}</p>
-      <p><strong>Ciudad:</strong> {usuario.ciudad}</p>
-      <p><strong>País:</strong> {usuario.pais}</p>
-      <p><strong>Rol:</strong> {usuario.rol}</p>
-      <p><strong>Activo:</strong> {usuario.estado ? 'Sí' : 'No'}</p>
-      <p><strong>Fecha Registro:</strong> {new Date(usuario.fecha_registro).toLocaleString()}</p>
+      <h2>Detalle Usuario #{usuario.id}</h2>
+      <p>Nombre: {usuario.nombre}</p>
+      <p>Email: {usuario.email}</p>
+      <p>Rol: {usuario.rol}</p>
     </div>
   );
 }

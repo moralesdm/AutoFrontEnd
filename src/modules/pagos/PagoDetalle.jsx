@@ -1,27 +1,30 @@
-// src/modules/pagos/PagoDetalle.jsx
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getPagoById } from '../../api/pagos';
 
 export default function PagoDetalle() {
   const { id } = useParams();
   const [pago, setPago] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getPagoById(id).then(setPago);
+    getPagoById(id)
+      .then(setPago)
+      .finally(() => setLoading(false));
   }, [id]);
 
-  if (!pago) return <p>Cargando...</p>;
+  if (loading) return <div>Cargando pago...</div>;
+  if (!pago) return <div>Pago no encontrado</div>;
 
   return (
     <div>
-      <h2>Detalle del Pago #{pago.id}</h2>
-      <p><strong>Fecha:</strong> {new Date(pago.fecha).toLocaleString()}</p>
-      <p><strong>Monto:</strong> ${pago.monto.toFixed(2)}</p>
-      <p><strong>Método de pago:</strong> {pago.metodoPago}</p>
-      <p><strong>Usuario:</strong> {pago.usuario?.nombre} {pago.usuario?.apellido}</p>
-      <p><strong>Reserva:</strong> #{pago.reserva?.id}</p>
-      <Link to="/pagos">Volver</Link>
+      <h2>Detalle Pago #{pago.id}</h2>
+      <p>Usuario ID: {pago.usuarioId}</p>
+      <p>Reserva ID: {pago.reservaId}</p>
+      <p>Monto: ${pago.monto}</p>
+      <p>Método de pago: {pago.metodoPago}</p>
+      <p>Fecha: {new Date(pago.fecha).toLocaleString()}</p>
+      <p>Estado: {pago.estado}</p>
     </div>
   );
 }

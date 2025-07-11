@@ -1,12 +1,21 @@
-// src/api/facturas.js
-const API_URL = 'http://localhost:3001/api/facturas'; // ajusta si cambia
+const API_BASE = 'http://localhost:3004/api/facturas';
 
 export const getFacturas = async () => {
-  const res = await fetch(API_URL);
-  return await res.json();
+  const res = await fetch(`${API_BASE}`);
+  if (!res.ok) throw new Error('Error al obtener facturas');
+  return res.json();
 };
 
 export const getFacturaById = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`);
-  return await res.json();
+  const res = await fetch(`${API_BASE}/${id}`);
+  if (!res.ok) throw new Error('Error al obtener factura');
+  return res.json();
+};
+
+export const generarFactura = async (reservaId) => {
+  const res = await fetch(`${API_BASE}/generar/${reservaId}`, {
+    method: 'POST',
+  });
+  if (!res.ok) throw new Error('Error al generar factura');
+  return res.json();
 };

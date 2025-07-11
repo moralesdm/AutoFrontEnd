@@ -1,6 +1,5 @@
-// src/modules/usuarios/UsuarioList.jsx
 import { useEffect, useState } from 'react';
-import { getUsuarios } from '../../api/usuarios';
+import { getUsuarios } from '../../api/auth';
 import { Link } from 'react-router-dom';
 
 export default function UsuarioList() {
@@ -13,32 +12,17 @@ export default function UsuarioList() {
   return (
     <div>
       <h2>Usuarios</h2>
-      <Link to="/usuarios/nuevo" className="btn">+ Crear nuevo usuario</Link>
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuarios.map(user => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.nombre} {user.apellido}</td>
-              <td>{user.email}</td>
-              <td>{user.rol}</td>
-              <td>
-                <Link to={`/usuarios/${user.id}`}>Ver</Link> |{" "}
-                <Link to={`/usuarios/${user.id}/editar`}>Editar</Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Link to="/usuarios/nuevo" className="btn">+ Nuevo Usuario</Link>
+      <ul>
+        {usuarios.map(u => (
+          <li key={u.id}>
+            {u.nombre} ({u.email})
+            {' '}
+            <Link to={`/usuarios/${u.id}`}>Detalle</Link>{' '}
+            <Link to={`/usuarios/${u.id}/editar`}>Editar</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

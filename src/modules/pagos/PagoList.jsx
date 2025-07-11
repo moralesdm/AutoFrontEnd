@@ -1,4 +1,3 @@
-// src/modules/pagos/PagoList.jsx
 import { useEffect, useState } from 'react';
 import { getPagos } from '../../api/pagos';
 import { Link } from 'react-router-dom';
@@ -13,34 +12,15 @@ export default function PagoList() {
   return (
     <div>
       <h2>Pagos</h2>
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Monto</th>
-            <th>Método</th>
-            <th>Usuario</th>
-            <th>Reserva</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pagos.map(p => (
-            <tr key={p.id}>
-              <td>{p.id}</td>
-              <td>{new Date(p.fecha).toLocaleString()}</td>
-              <td>${p.monto.toFixed(2)}</td>
-              <td>{p.metodoPago}</td>
-              <td>{p.usuario?.nombre} {p.usuario?.apellido}</td>
-              <td>{p.reserva?.id}</td>
-              <td>
-                <Link to={`/pagos/${p.id}`}>Ver</Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <ul>
+        {pagos.map(p => (
+          <li key={p.id}>
+            Pago #{p.id} - Monto: ${p.monto} - Estado: {p.estado}
+            {' '}
+            <Link to={`/pagos/${p.id}`}>Detalle</Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

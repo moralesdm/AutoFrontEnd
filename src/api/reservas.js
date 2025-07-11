@@ -1,30 +1,41 @@
-// src/api/reservas.js
-const API_URL = 'http://localhost:3001/api/reservas'; // Ajustar si es necesario
+const API_BASE = 'http://localhost:3003/api/reservas';
 
 export const getReservas = async () => {
-  const res = await fetch(API_URL);
-  return await res.json();
+  const res = await fetch(`${API_BASE}`);
+  if (!res.ok) throw new Error('Error al obtener reservas');
+  return res.json();
 };
 
 export const getReservaById = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`);
-  return await res.json();
+  const res = await fetch(`${API_BASE}/${id}`);
+  if (!res.ok) throw new Error('Error al obtener reserva');
+  return res.json();
 };
 
-export const createReserva = async (data) => {
-  const res = await fetch(API_URL, {
+export const createReserva = async (reservaData) => {
+  const res = await fetch(`${API_BASE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+    body: JSON.stringify(reservaData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al crear reserva');
+  return res.json();
 };
 
-export const updateReserva = async (data, id) => {
-  const res = await fetch(`${API_URL}/${id}`, {
+export const updateReserva = async (id, reservaData) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+    body: JSON.stringify(reservaData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al actualizar reserva');
+  return res.json();
+};
+
+export const deleteReserva = async (id) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Error al eliminar reserva');
+  return res.json();
 };

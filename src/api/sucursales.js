@@ -1,30 +1,41 @@
-// src/api/sucursales.js
-const API_URL = 'http://localhost:3001/api/sucursales'; // ajusta si es necesario
+const API_BASE = 'http://localhost:3002/api/vehiculos/sucursales';
 
 export const getSucursales = async () => {
-  const res = await fetch(API_URL);
-  return await res.json();
+  const res = await fetch(`${API_BASE}`);
+  if (!res.ok) throw new Error('Error al obtener sucursales');
+  return res.json();
 };
 
 export const getSucursalById = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`);
-  return await res.json();
+  const res = await fetch(`${API_BASE}/${id}`);
+  if (!res.ok) throw new Error('Error al obtener sucursal');
+  return res.json();
 };
 
-export const createSucursal = async (data) => {
-  const res = await fetch(API_URL, {
+export const createSucursal = async (sucursalData) => {
+  const res = await fetch(`${API_BASE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(sucursalData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al crear sucursal');
+  return res.json();
 };
 
-export const updateSucursal = async (data, id) => {
-  const res = await fetch(`${API_URL}/${id}`, {
+export const updateSucursal = async (id, sucursalData) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(sucursalData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al actualizar sucursal');
+  return res.json();
+};
+
+export const deleteSucursal = async (id) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Error al eliminar sucursal');
+  return res.json();
 };

@@ -1,30 +1,41 @@
-// src/api/caracteristicas.js
-const API_URL = 'http://localhost:3001/api/caracteristicas'; // ajusta según tu backend
+const API_BASE = 'http://localhost:3002/api/vehiculos/caracteristicas';
 
 export const getCaracteristicas = async () => {
-  const res = await fetch(API_URL);
-  return await res.json();
+  const res = await fetch(`${API_BASE}`);
+  if (!res.ok) throw new Error('Error al obtener características');
+  return res.json();
 };
 
 export const getCaracteristicaById = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`);
-  return await res.json();
+  const res = await fetch(`${API_BASE}/${id}`);
+  if (!res.ok) throw new Error('Error al obtener característica');
+  return res.json();
 };
 
-export const createCaracteristica = async (data) => {
-  const res = await fetch(API_URL, {
+export const createCaracteristica = async (caracteristicaData) => {
+  const res = await fetch(`${API_BASE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(caracteristicaData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al crear característica');
+  return res.json();
 };
 
-export const updateCaracteristica = async (data, id) => {
-  const res = await fetch(`${API_URL}/${id}`, {
+export const updateCaracteristica = async (id, caracteristicaData) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: JSON.stringify(caracteristicaData),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('Error al actualizar característica');
+  return res.json();
+};
+
+export const deleteCaracteristica = async (id) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Error al eliminar característica');
+  return res.json();
 };
