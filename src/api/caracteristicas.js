@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-API_BASE = `${API_URL}/api/vehiculos/caracteristicas`;
+const API_BASE = `${API_URL}/api/vehiculos/caracteristicas`;
 
 export const getCaracteristicas = async () => {
   const res = await fetch(`${API_BASE}`);

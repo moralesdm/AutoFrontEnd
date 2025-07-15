@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-API_BASE = `${API_URL}/api/reservas`;
+const API_BASE = `${API_URL}/api/reservas`;
 
 export const getReservas = async () => {
   const res = await fetch(`${API_BASE}`);
