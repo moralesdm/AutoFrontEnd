@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:3002/api/vehiculos/sucursales';
+const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
+
+API_BASE = `${API_URL}/api/vehiculos/sucursales`;
 
 export const getSucursales = async () => {
   const res = await fetch(`${API_BASE}`);

@@ -1,4 +1,6 @@
-const API_BASE = 'http://localhost:3001/auth';
+const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
+
+API_BASE= `${API_URL}/auth`;
 
 export const loginUser = async (email, password) => {
   const res = await fetch(`${API_BASE}/login`, {
