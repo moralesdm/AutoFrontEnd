@@ -1,0 +1,75 @@
+name: 🚀 Deploy Frontend CI/CD
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - dev
+
+env:
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/alquiler-frontend
+  CONTAINER_ID: alquiler-frontend
+  REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+  REMOTE_USER: ${{ secrets.REMOTE_USER }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  API_GATEWAY_URL: ${{ secrets.API_GATEWAY_URL }}
+
+jobs:
+  docker-build-push:
+    name: 🛠️ Compilar y Publicar Imagen Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Descargar código fuente
+        uses: actions/checkout@v3
+
+      - name: 🧱 Inicializar Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: 🔑 Autenticarse en DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: 🏗️ Construir y Publicar imagen
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.DOCKER_IMAGE }}:latest
+          build-args: |
+            VITE_API_GATEWAY=${{ env.API_GATEWAY_URL }}
+
+  remote-deploy:
+    name: 📡 Desplegar en Servidor EC2
+    needs: docker-build-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Conexión remota y despliegue
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ env.REMOTE_HOST }}
+          username: ${{ env.REMOTE_USER }}
+          key: ${{ env.SSH_PRIVATE_KEY }}
+          script: |
+            # Verificar e instalar Docker si es necesario
+            if ! command -v docker &> /dev/null; then
+              curl -fsSL https://get.docker.com -o get-docker.sh
+              sudo sh get-docker.sh
+              rm get-docker.sh
+            fi
+
+            # Eliminar contenedor previo si existe
+            if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^${{ env.CONTAINER_ID }}$"; then
+              sudo docker stop ${{ env.CONTAINER_ID }}
+              sudo docker rm ${{ env.CONTAINER_ID }}
+            fi
+
+            # Descargar imagen actualizada y lanzar contenedor
+            sudo docker pull ${{ env.DOCKER_IMAGE }}:latest
+            sudo docker run -d --name ${{ env.CONTAINER_ID }} \
+              -e VITE_API_GATEWAY=${{ env.API_GATEWAY_URL }} \
+              -p 80:80 \
+              ${{ env.DOCKER_IMAGE }}:latest
