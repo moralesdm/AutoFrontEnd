@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-const API_BASE = `${API_URL}/api/vehiculos/sucursales`;
+const API_BASE = `${API_URL}/api/vehiculos/sucursales/`;
 
 export const getSucursales = async () => {
   const res = await fetch(`${API_BASE}`);
@@ -9,7 +9,7 @@ export const getSucursales = async () => {
 };
 
 export const getSucursalById = async (id) => {
-  const res = await fetch(`${API_BASE}/${id}`);
+  const res = await fetch(`${API_BASE}${id}`);
   if (!res.ok) throw new Error('Error al obtener sucursal');
   return res.json();
 };
@@ -25,7 +25,7 @@ export const createSucursal = async (sucursalData) => {
 };
 
 export const updateSucursal = async (id, sucursalData) => {
-  const res = await fetch(`${API_BASE}/${id}`, {
+  const res = await fetch(`${API_BASE}${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(sucursalData),
@@ -35,7 +35,7 @@ export const updateSucursal = async (id, sucursalData) => {
 };
 
 export const deleteSucursal = async (id) => {
-  const res = await fetch(`${API_BASE}/${id}`, {
+  const res = await fetch(`${API_BASE}${id}`, {
     method: 'DELETE',
   });
   if (!res.ok) throw new Error('Error al eliminar sucursal');
