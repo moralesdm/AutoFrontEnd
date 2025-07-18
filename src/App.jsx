@@ -32,6 +32,7 @@ import CaracteristicaForm from './modules/caracteristicas/CaracteristicaForm'
 import ReservaList from './modules/reservas/ReservaList'
 import ReservaForm from './modules/reservas/ReservaForm'
 import ReservaDetalle from './modules/reservas/ReservaDetalle'
+import NuevoPago from './modules/pagos/NuevoPago';
 
 import PagoList from './modules/pagos/PagoList'
 import PagoDetalle from './modules/pagos/PagoDetalle'
@@ -115,6 +116,8 @@ function App() {
         <Route path="reservas/nueva" element={<ReservaForm />} />
         <Route path="reservas/:id/editar" element={<ReservaForm />} />
         <Route path="reservas/:id" element={<ReservaDetalle />} />
+        <Route path="pagos/nuevo" element={<NuevoPago />} />
+        <Route path="reservas/:id/pagar" element={<NuevoPago />} />
 
         {/* Pagos */}
         <Route path="pagos" element={<PagoList />} />
