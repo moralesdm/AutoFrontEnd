@@ -14,9 +14,10 @@ COPY . .
 
 # Argumento para la URL del gateway
 ARG VITE_API_GATEWAY
+ENV VITE_API_GATEWAY=$VITE_API_GATEWAY
 
-# Compilar la aplicación (inyectando la variable directamente)
-RUN VITE_API_GATEWAY=$VITE_API_GATEWAY npm run build
+# Compilar la aplicación
+RUN npm run build
 
 # Etapa 2: Producción con nginx
 FROM nginx:alpine
@@ -26,6 +27,9 @@ RUN rm -rf /usr/share/nginx/html/*
 
 # Copia archivos construidos desde la etapa anterior
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copia configuración personalizada de nginx (opcional)
+# COPY nginx.conf /etc/nginx/nginx.conf
 
 # Exponer el puerto
 EXPOSE 3000
