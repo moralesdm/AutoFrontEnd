@@ -43,8 +43,7 @@ export const deleteVehiculo = async (id) => {
 };
 
 export const getCategoriasVehiculos = async () => {
-  const res = await fetch(`${API_BASE}/categorias`);
+  const res = await fetch('http://13.223.20.3/api/vehiculos/categorias');
   if (!res.ok) throw new Error('Error al obtener categorías');
   return res.json();
 };
-
