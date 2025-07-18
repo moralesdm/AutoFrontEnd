@@ -1,6 +1,5 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
-
-const API_BASE = `${API_URL}/api/pagos`; // ✅ correcta
+const API_BASE = `${API_URL}/api/pagos/pagos`; 
 
 export const getPagos = async () => {
   const res = await fetch(`${API_BASE}`);
@@ -15,7 +14,7 @@ export const getPagoById = async (id) => {
 };
 
 export const createPago = async (pagoData) => {
-  const res = await fetch(`${API_BASE}/procesar`, { // ✅ endpoint correcto
+  const res = await fetch(`${API_BASE}/procesar`, { // ✅ CORRECTO: POST /procesar
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pagoData),

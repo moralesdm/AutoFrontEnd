@@ -20,7 +20,6 @@ export default function ReservaList() {
             {' '}
             <Link to={`/reservas/${r.id}`}>Detalle</Link>{' '}
             <Link to={`/reservas/${r.id}/editar`}>Editar</Link>{' '}
-            <Link to={`/reservas/${r.id}/pagar?usuarioId=${r.usuarioId}`}>Pagar</Link>
           </li>
         ))}
       </ul>
