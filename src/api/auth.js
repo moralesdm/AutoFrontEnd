@@ -1,9 +1,9 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-const API_BASE= `${API_URL}/auth/`;
+const API_BASE= `${API_URL}/auth`;
 
 export const loginUser = async (email, password) => {
-  const res = await fetch(`${API_BASE}login/`, {
+  const res = await fetch(`${API_BASE}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
@@ -13,7 +13,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const registerUser = async (userData) => {
-  const res = await fetch(`${API_BASE}register/`, {
+  const res = await fetch(`${API_BASE}/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(userData),
@@ -23,7 +23,7 @@ export const registerUser = async (userData) => {
 };
 
 export const forgotPassword = async (email) => {
-  const res = await fetch(`${API_BASE}forgot-password/`, {
+  const res = await fetch(`${API_BASE}/forgot-password`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
@@ -33,7 +33,7 @@ export const forgotPassword = async (email) => {
 };
 
 export const resetPassword = async (token, newPassword) => {
-  const res = await fetch(`${API_BASE}reset-password/`, {
+  const res = await fetch(`${API_BASE}/reset-password`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token, newPassword }),
@@ -43,7 +43,7 @@ export const resetPassword = async (token, newPassword) => {
 };
 
 export const refreshToken = async (token) => {
-  const res = await fetch(`${API_BASE}refresh-token/`, {
+  const res = await fetch(`${API_BASE}/refresh-token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token }),
@@ -53,7 +53,7 @@ export const refreshToken = async (token) => {
 };
 
 export const logout = async (token) => {
-  const res = await fetch(`${API_BASE}logout/`, {
+  const res = await fetch(`${API_BASE}/logout`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token }),
@@ -63,7 +63,7 @@ export const logout = async (token) => {
 };
 
 export const getProfile = async (token) => {
-  const res = await fetch(`${API_BASE}me/`, {
+  const res = await fetch(`${API_BASE}/me`, {
     method: 'GET',
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -72,7 +72,7 @@ export const getProfile = async (token) => {
 };
 
 export const getUsuarios = async (token) => {
-  const res = await fetch(`${API_BASE}usuarios`, {
+  const res = await fetch(`${API_BASE}/`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!res.ok) throw new Error((await res.json()).message || 'Error al obtener usuarios');

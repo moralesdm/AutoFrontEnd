@@ -9,7 +9,7 @@ export const getVehiculos = async () => {
 };
 
 export const getVehiculoById = async (id) => {
-  const res = await fetch(`${API_BASE}${id}`);
+  const res = await fetch(`${API_BASE}/${id}`);
   if (!res.ok) throw new Error('Error al obtener vehículo');
   return res.json();
 };
@@ -25,7 +25,7 @@ export const createVehiculo = async (vehiculoData) => {
 };
 
 export const updateVehiculo = async (id, vehiculoData) => {
-  const res = await fetch(`${API_BASE}${id}`, {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(vehiculoData),
@@ -35,7 +35,7 @@ export const updateVehiculo = async (id, vehiculoData) => {
 };
 
 export const deleteVehiculo = async (id) => {
-  const res = await fetch(`${API_BASE}${id}`, {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'DELETE',
   });
   if (!res.ok) throw new Error('Error al eliminar vehículo');

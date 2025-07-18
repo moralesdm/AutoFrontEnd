@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-const API_BASE = `${API_URL}/api/vehiculos/categorias/`;
+const API_BASE = `${API_URL}/api/vehiculos/categorias`;
 
 export const getCategorias = async () => {
   const res = await fetch(`${API_BASE}`);
@@ -9,7 +9,7 @@ export const getCategorias = async () => {
 };
 
 export const getCategoriaById = async (id) => {
-  const res = await fetch(`${API_BASE}${id}`);
+  const res = await fetch(`${API_BASE}/${id}`);
   if (!res.ok) throw new Error('Error al obtener categoría');
   return res.json();
 };
@@ -25,7 +25,7 @@ export const createCategoria = async (categoriaData) => {
 };
 
 export const updateCategoria = async (id, categoriaData) => {
-  const res = await fetch(`${API_BASE}${id}`, {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(categoriaData),
@@ -35,7 +35,7 @@ export const updateCategoria = async (id, categoriaData) => {
 };
 
 export const deleteCategoria = async (id) => {
-  const res = await fetch(`${API_BASE}${id}`, {
+  const res = await fetch(`${API_BASE}/${id}`, {
     method: 'DELETE',
   });
   if (!res.ok) throw new Error('Error al eliminar categoría');
