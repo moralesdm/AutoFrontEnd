@@ -14,7 +14,7 @@ env:
   REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
   REMOTE_USER: ${{ secrets.REMOTE_USER }}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-  API_GATEWAY_URL: ${{ secrets.API_GATEWAY_URL }}
+  VITE_API_GATEWAY: ${{ secrets.VITE_API_GATEWAY }}
 
 jobs:
   docker-build-push:
@@ -40,7 +40,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
           build-args: |
-            VITE_API_GATEWAY=${{ env.API_GATEWAY_URL }}
+            VITE_API_GATEWAY=${{ env.VITE_API_GATEWAY }}
 
   remote-deploy:
     name: 📡 Desplegar en Servidor EC2
