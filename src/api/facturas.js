@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-const API_BASE = `${API_URL}/api/facturas`;
+const API_BASE = `${API_URL}/api/facturas/facturas`;
 
 export const getFacturas = async () => {
   const res = await fetch(`${API_BASE}`);

@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-const API_BASE = `${API_URL}/api/alquileres`;
+const API_BASE = `${API_URL}/api/alquileres/alquileres`;
 
 export const iniciarAlquiler = async (alquilerData) => {
   const res = await fetch(`${API_BASE}/iniciar`, {
