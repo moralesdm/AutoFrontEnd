@@ -15,7 +15,7 @@ export const getPagoById = async (id) => {
 };
 
 export const createPago = async (pagoData) => {
-  const res = await fetch(`${API_BASE}`, {
+  const res = await fetch(`${API_BASE}/procesar`, { // ✅ endpoint correcto
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pagoData),
