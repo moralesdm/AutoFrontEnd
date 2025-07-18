@@ -1,10 +1,9 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-// ✅ Barra final agregada para evitar redirecciones 301
-const API_BASE = `${API_URL}/api/alquileres/`;
+const API_BASE = `${API_URL}/api/alquileres`;
 
 export const iniciarAlquiler = async (alquilerData) => {
-  const res = await fetch(`${API_BASE}iniciar`, {
+  const res = await fetch(`${API_BASE}/iniciar`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(alquilerData),
@@ -14,7 +13,7 @@ export const iniciarAlquiler = async (alquilerData) => {
 };
 
 export const finalizarAlquiler = async (id, data) => {
-  const res = await fetch(`${API_BASE}finalizar/${id}`, {
+  const res = await fetch(`${API_BASE}/finalizar/${id}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -24,8 +23,7 @@ export const finalizarAlquiler = async (id, data) => {
 };
 
 export const getAlquilerById = async (id) => {
-  const res = await fetch(`${API_BASE}${id}`);
+  const res = await fetch(`${API_BASE}/${id}`);
   if (!res.ok) throw new Error('Error al obtener alquiler');
   return res.json();
 };
-  

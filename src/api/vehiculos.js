@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_GATEWAY || 'http://localhost';
 
-const API_BASE = `${API_URL}/api/vehiculos/`;
+const API_BASE = `${API_URL}/api/vehiculos`;
 
 export const getVehiculos = async () => {
   const res = await fetch(`${API_BASE}`);
@@ -43,7 +43,7 @@ export const deleteVehiculo = async (id) => {
 };
 
 export const getCategoriasVehiculos = async () => {
-  const res = await fetch(`${API_BASE}categorias`);
+  const res = await fetch('http://13.223.20.3/api/vehiculos/categorias');
   if (!res.ok) throw new Error('Error al obtener categorías');
   return res.json();
 };
