@@ -19,7 +19,7 @@ export default function ReservaList() {
             Reserva #{r.id} - Usuario: {r.usuarioNombre || r.usuarioId} - Vehículo: {r.vehiculoModelo || r.vehiculoId}
             {' '}
             <Link to={`/reservas/${r.id}`}>Detalle</Link>{' '}
-            <Link to={`/reservas/${r.id}/editar`}>Editar</Link>{' '}
+            <Link to={`/reservas/${r.id}/editar`}>Editar</Link>
           </li>
         ))}
       </ul>
